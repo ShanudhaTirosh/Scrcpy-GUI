@@ -1,0 +1,33 @@
+{
+  "name": "shanufx-android-control",
+  "version": "2026.1.21",
+  "description": "ShanuFx Android Control - Premium Scrcpy GUI",
+  "author": "ShanuFx",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --windows"
+  },
+  "build": {
+    "appId": "com.shanufx.androidcontrol",
+    "productName": "ShanuFx Android Control",
+    "win": {
+      "icon": "build/shanu.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "devDependencies": {
+    "electron": "^40.0.0",
+    "electron-builder": "^26.5.0"
+  }
+}

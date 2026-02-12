@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShanuFx Android Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #141420;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0f0f1a 50%, var(--bg-primary) 100%);
+            color: #f1f5f9; 
+            overflow-x: hidden;
+        }
+        
+        .ultra-dark {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+        }
+        
+        /* Premium Glassmorphism */
+        .glass { 
+            background: rgba(20, 20, 32, 0.85); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        /* Glowing Buttons */
+        .btn-primary { 
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+        }
+        
+        .btn-stop { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn-stop:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Animated Status Dot */
+        .status-dot { 
+            height: 10px; 
+            width: 10px; 
+            border-radius: 50%; 
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Premium Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #a855f7 0%, #7c3aed 100%); 
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%); }
+        
+        /* Enhanced Inputs */
+        kbd { 
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+            border-radius: 6px; 
+            padding: 3px 8px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 0.7rem; 
+            border: 1px solid #475569; 
+            color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        input[type="number"], input[type="text"], select { 
+            background: rgba(15, 23, 42, 0.8); 
+            border: 1px solid rgba(148, 163, 184, 0.2); 
+            border-radius: 8px; 
+            padding: 8px 12px; 
+            color: #f1f5f9; 
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus { 
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+        
+        .animate-spin-custom { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .tab-btn { 
+            transition: all 0.2s; 
+            border-bottom: 2px solid transparent; 
+            opacity: 0.6; 
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .tab-btn.active { 
+            border-color: #a855f7; 
+            color: #a855f7; 
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        
+        .recent-item { 
+            transition: all 0.2s ease; 
+            cursor: pointer; 
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+        .recent-item:hover { 
+            background: rgba(168, 85, 247, 0.2); 
+            border-color: rgba(168, 85, 247, 0.4); 
+            color: #a855f7;
+            transform: translateX(4px);
+        }
+        
+        /* Connection Badge */
+        .connection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-usb {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        .badge-wireless {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        
+        /* Session Timer */
+        .session-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #a855f7;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: rgba(20, 20, 32, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Theme Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(148, 163, 184, 0.3);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Preset Button Active State */
+        .preset-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.5);
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+        .preset-btn:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.1);
+        }
+        .preset-btn.active {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+        }
+    </style>
+</head>
+<body class="p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2">
+            <div>
+                <h1 class="text-3xl font-black tracking-tight">
+                    <span class="gradient-text">ShanuFx</span> 
+                    <span class="text-white">Android Control</span>
+                </h1>
+                <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold mt-1">Premium Device Mirroring Suite</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+                <!-- Theme Toggle -->
+                <div class="glass px-4 py-2 rounded-xl flex items-center gap-3">
+                    <span class="text-[10px] uppercase font-bold text-slate-400">Ultra Dark</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <!-- Binary Status Panel -->
+                <div class="glass px-4 py-2 rounded-xl flex items-center gap-4">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 mb-1">Binary Status</span>
+                        <div class="flex items-center gap-2">
+                            <div id="pathDisplay" class="text-xs font-mono font-bold text-yellow-500">Checking...</div>
+                            <button id="downloadBinaryBtn" onclick="window.open('https://github.com/Genymobile/scrcpy/releases')" class="hidden px-2 py-0.5 bg-purple-600/20 border border-purple-500/50 rounded-md text-[9px] font-black text-purple-400 hover:bg-purple-600 hover:text-white transition-all uppercase tracking-tighter">Get Scrcpy</button>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 border-l border-slate-700/50 pl-3">
+                        <button id="setPath" class="p-1 hover:text-purple-400 text-slate-400 transition-colors" title="Select Folder"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg></button>
+                        <button id="resetPath" class="p-1 hover:text-red-400 text-slate-400 transition-colors" title="Reset Path"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></button>
+                    </div>
+                </div>
+                
+                <!-- Status Badge with Connection Type -->
+                <div class="glass px-4 py-3 rounded-xl text-sm flex items-center gap-3">
+                    <span id="statusDot" class="status-dot bg-yellow-500"></span>
+                    <div class="flex flex-col gap-1">
+                        <span id="statusText" class="font-bold text-slate-200">ADB: Init</span>
+                        <span id="connectionBadge" class="hidden connection-badge">
+                            <span id="badgeDot" class="w-2 h-2 rounded-full"></span>
+                            <span id="badgeText"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Sidebar -->
+            <aside class="lg:col-span-3 space-y-4">
+                <div class="glass p-6 rounded-2xl space-y-5">
+                    <div class="flex justify-between items-center border-b border-slate-700/50 pb-4">
+                        <h2 class="text-sm font-black uppercase text-purple-400 tracking-tight">Devices</h2>
+                        <div class="flex gap-2">
+                            <button id="killAdb" class="flex items-center gap-1 text-[10px] text-red-400 hover:text-red-500 uppercase font-bold transition-colors" title="Clear stuck operations">Kill ADB</button>
+                            <button id="refreshDevices" class="flex items-center gap-1 text-xs text-purple-400 hover:text-white uppercase font-bold transition-colors">
+                                <svg id="refreshIcon" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Active Device Selection</label>
+                        <select id="deviceList" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-3 py-2.5 outline-none focus:border-purple-500 text-sm text-slate-200 font-medium">
+                            <option value="">Searching...</option>
+                        </select>
+                        <button id="deviceInfoBtn" class="w-full py-2 px-4 btn-secondary rounded-lg text-xs font-bold uppercase transition-all">
+                            Device Info
+                        </button>
+                    </div>
+
+                    <div class="flex border-b border-slate-800 mb-2">
+                        <button onclick="switchTab('usb')" id="tab-usb" class="tab-btn active flex-1 py-2 text-[10px] font-bold uppercase tracking-wider">USB Info</button>
+                        <button onclick="switchTab('wireless')" id="tab-wireless" class="tab-btn flex-1 py-2 text-[10px] font-bold uppercase tracking-wider">Wireless</button>
+                    </div>
+
+                    <div id="usb-view" class="space-y-3">
+                        <p class="text-[10px] text-slate-400 italic leading-relaxed">Devices plugged via USB will automatically appear in the list above. Ensure USB Debugging is enabled.</p>
+                    </div>
+
+                    <div id="wireless-view" class="hidden space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-[11px] text-slate-400 uppercase font-bold">1. Connect via IP</label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <span class="text-[9px] text-slate-500 uppercase font-bold">Auto</span>
+                                    <input type="checkbox" id="autoConnect" class="rounded text-purple-600 w-3 h-3">
+                                </label>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <input type="text" id="wirelessIp" placeholder="192.168.1.x:5555" class="text-sm text-slate-200">
+                                <button id="connectWireless" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold uppercase transition-all shadow-lg">Connect</button>
+                            </div>
+                            <div id="recentContainer" class="hidden mt-3 space-y-2">
+                                <label class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">History</label>
+                                <div id="recentList" class="flex flex-col gap-1"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-slate-800">
+                            <label class="text-[11px] text-slate-400 uppercase font-bold">2. Pair New Device</label>
+                            <input type="text" id="pairIp" placeholder="IP:Port (192.168.1.x:xxxxx)" class="w-full text-sm text-slate-200">
+                            <input type="text" id="pairCode" placeholder="6-Digit Code" class="w-full text-sm text-slate-200" maxlength="6">
+                            <button id="pairBtn" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold uppercase transition-all shadow-lg">Pair Device</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-9 space-y-4">
+                <!-- Session Timer (Hidden by default) -->
+                <div id="sessionTimerPanel" class="hidden glass p-4 rounded-2xl flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                        <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Session</span>
+                    </div>
+                    <div class="session-timer" id="sessionTimer">00:00:00</div>
+                </div>
+                
+                <!-- Performance Presets -->
+                <div class="glass p-5 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700/50 pb-3">
+                        <h2 class="text-sm font-black uppercase text-purple-400 tracking-tight">Performance Presets</h2>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="applyPreset('performance')" class="preset-btn text-xs">
+                            <div class="font-bold mb-1">⚡ Performance</div>
+                            <div class="text-[9px] text-slate-500">480p • 4Mbps • 30FPS</div>
+                        </button>
+                        <button onclick="applyPreset('balanced')" class="preset-btn text-xs active">
+                            <div class="font-bold mb-1">⚖️ Balanced</div>
+                            <div class="text-[9px] text-slate-500">720p • 8Mbps • 60FPS</div>
+                        </button>
+                        <button onclick="applyPreset('ultra')" class="preset-btn text-xs">
+                            <div class="font-bold mb-1">🔥 Ultra Quality</div>
+                            <div class="text-[9px] text-slate-500">1080p • 16Mbps • 60FPS</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Settings -->
+                <div class="glass p-6 rounded-2xl space-y-5">
+                    <div class="flex justify-between items-center border-b border-slate-700/50 pb-4">
+                        <h2 class="text-sm font-black uppercase text-purple-400 tracking-tight">Video Settings</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Resolution</label>
+                            <select id="resolution" class="w-full">
+                                <option value="0">Native</option>
+                                <option value="1920">1920 (1080p)</option>
+                                <option value="1280" selected>1280 (720p)</option>
+                                <option value="854">854 (480p)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Bitrate</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="bitrate" min="1" max="30" value="8" class="flex-1">
+                                <span id="bitrateVal" class="text-xs font-bold text-purple-400 min-w-[4rem]">8 Mbps</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Max FPS</label>
+                            <select id="fps" class="w-full">
+                                <option value="30">30 FPS</option>
+                                <option value="60" selected>60 FPS</option>
+                                <option value="120">120 FPS</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Rotation</label>
+                            <select id="rotation" class="w-full">
+                                <option value="0">0° (Auto)</option>
+                                <option value="1">90° CW</option>
+                                <option value="2">180°</option>
+                                <option value="3">270° CW</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="stayAwake" class="rounded text-purple-600 w-4 h-4">
+                            <span class="text-xs text-slate-300 group-hover:text-purple-400 transition-colors font-medium">Stay Awake</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="turnScreenOff" class="rounded text-purple-600 w-4 h-4">
+                            <span class="text-xs text-slate-300 group-hover:text-purple-400 transition-colors font-medium">Turn Screen Off</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="audioEnabled" checked class="rounded text-purple-600 w-4 h-4">
+                            <span class="text-xs text-slate-300 group-hover:text-purple-400 transition-colors font-medium">Audio Enabled</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="alwaysOnTop" class="rounded text-purple-600 w-4 h-4">
+                            <span class="text-xs text-slate-300 group-hover:text-purple-400 transition-colors font-medium">Always On Top</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Virtual Display -->
+                <div class="glass p-6 rounded-2xl space-y-4">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" id="virtualDisplay" class="rounded text-purple-600 w-5 h-5">
+                        <div>
+                            <span class="text-sm font-black text-purple-400 uppercase">Virtual Display Mode</span>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Create secondary display (Android 10+)</p>
+                        </div>
+                    </label>
+
+                    <div id="vdSettings" class="hidden grid grid-cols-3 gap-4 pt-3 border-t border-slate-800">
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black">Width</label>
+                            <input type="number" id="vdWidth" value="1920" class="w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black">Height</label>
+                            <input type="number" id="vdHeight" value="1080" class="w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] text-slate-400 uppercase font-black">DPI</label>
+                            <input type="number" id="vdDpi" value="320" class="w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Launch Button -->
+                <button id="startBtn" class="btn-primary w-full py-6 rounded-2xl text-white text-xl font-black transition-all uppercase tracking-wider">
+                    Launch Mirroring
+                </button>
+
+                <!-- Logs -->
+                <div class="glass p-6 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700/50 pb-4">
+                        <h2 class="text-sm font-black uppercase text-purple-400 tracking-tight">System Logs</h2>
+                        <button onclick="document.getElementById('logs').innerHTML=''" class="text-xs text-slate-500 hover:text-red-400 uppercase font-bold transition-colors">Clear</button>
+                    </div>
+                    <div id="logs" class="bg-slate-950/50 rounded-xl p-4 h-48 overflow-y-auto text-xs font-mono custom-scrollbar border border-slate-800/50"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="glass p-6 rounded-2xl text-center space-y-2 mt-8">
+            <div class="text-sm font-bold gradient-text">ShanuFx Android Control</div>
+            <div class="text-xs text-slate-500">Built with Electron + Scrcpy</div>
+            <div class="text-[10px] text-slate-600 font-medium">© 2026 ShanuFx. All rights reserved.</div>
+        </footer>
+    </div>
+
+    <!-- Device Info Modal -->
+    <div id="deviceInfoModal" class="modal-overlay hidden" onclick="if(event.target === this) closeDeviceInfoModal()">
+        <div class="modal-content custom-scrollbar">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-700/50">
+                <h3 class="text-lg font-black text-purple-400 uppercase">Device Information</h3>
+                <button onclick="closeDeviceInfoModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="deviceInfoContent" class="space-y-3 text-sm">
+                <div class="text-center text-slate-500 py-8">Loading device information...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const isElectron = typeof require !== 'undefined';
+        const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
+        
+        // DOM Elements
+        const deviceList = document.getElementById('deviceList');
+        const startBtn = document.getElementById('startBtn');
+        const refreshBtn = document.getElementById('refreshDevices');
+        const refreshIcon = document.getElementById('refreshIcon');
+        const killAdbBtn = document.getElementById('killAdb');
+        const connectWireless = document.getElementById('connectWireless');
+        const wirelessIp = document.getElementById('wirelessIp');
+        const pairBtn = document.getElementById('pairBtn');
+        const pairIp = document.getElementById('pairIp');
+        const pairCode = document.getElementById('pairCode');
+        const logEl = document.getElementById('logs');
+        const bitrateSlider = document.getElementById('bitrate');
+        const bitrateVal = document.getElementById('bitrateVal');
+        const vdCheckbox = document.getElementById('virtualDisplay');
+        const vdSettings = document.getElementById('vdSettings');
+        const statusText = document.getElementById('statusText');
+        const dot = document.getElementById('statusDot');
+        const pathDisplay = document.getElementById('pathDisplay');
+        const downloadBinaryBtn = document.getElementById('downloadBinaryBtn');
+        const connectionBadge = document.getElementById('connectionBadge');
+        const badgeDot = document.getElementById('badgeDot');
+        const badgeText = document.getElementById('badgeText');
+        const sessionTimerPanel = document.getElementById('sessionTimerPanel');
+        const sessionTimer = document.getElementById('sessionTimer');
+        const deviceInfoBtn = document.getElementById('deviceInfoBtn');
+        const deviceInfoModal = document.getElementById('deviceInfoModal');
+        const deviceInfoContent = document.getElementById('deviceInfoContent');
+        const themeToggle = document.getElementById('themeToggle');
+        
+        const PERSIST_KEY = 'shanufx_settings';
+        const HISTORY_KEY = 'shanufx_wireless_history';
+        let customScrcpyPath = localStorage.getItem('scrcpyPath') || null;
+        let isMirroring = false;
+        let sessionStartTime = null;
+        let timerInterval = null;
+
+        // Theme Management
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('shanufx_theme') || 'dark';
+            if (savedTheme === 'ultra-dark') {
+                document.body.classList.add('ultra-dark');
+                themeToggle.checked = true;
+            }
+        }
+
+        themeToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                document.body.classList.add('ultra-dark');
+                localStorage.setItem('shanufx_theme', 'ultra-dark');
+            } else {
+                document.body.classList.remove('ultra-dark');
+                localStorage.setItem('shanufx_theme', 'dark');
+            }
+        });
+
+        // Performance Presets
+        function applyPreset(type) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.preset-btn').classList.add('active');
+            
+            const presets = {
+                performance: { res: '854', bitrate: 4, fps: '30' },
+                balanced: { res: '1280', bitrate: 8, fps: '60' },
+                ultra: { res: '1920', bitrate: 16, fps: '60' }
+            };
+            
+            const preset = presets[type];
+            document.getElementById('resolution').value = preset.res;
+            bitrateSlider.value = preset.bitrate;
+            bitrateVal.textContent = preset.bitrate + ' Mbps';
+            document.getElementById('fps').value = preset.fps;
+            saveSettings();
+        }
+
+        // Session Timer
+        function startSessionTimer() {
+            sessionStartTime = Date.now();
+            sessionTimerPanel.classList.remove('hidden');
+            
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+                const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
+                const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
+                const seconds = (elapsed % 60).toString().padStart(2, '0');
+                sessionTimer.textContent = `${hours}:${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        function stopSessionTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            sessionTimerPanel.classList.add('hidden');
+            sessionTimer.textContent = '00:00:00';
+        }
+
+        // Connection Type Badge
+        function updateConnectionBadge(deviceId) {
+            if (!deviceId) {
+                connectionBadge.classList.add('hidden');
+                return;
+            }
+            
+            connectionBadge.classList.remove('hidden');
+            
+            if (deviceId.includes('.') || deviceId.includes(':')) {
+                connectionBadge.className = 'connection-badge badge-wireless';
+                badgeDot.className = 'w-2 h-2 rounded-full bg-blue-400';
+                badgeText.textContent = 'Wireless';
+            } else {
+                connectionBadge.className = 'connection-badge badge-usb';
+                badgeDot.className = 'w-2 h-2 rounded-full bg-green-400';
+                badgeText.textContent = 'USB';
+            }
+        }
+
+        // Device Info Modal
+        deviceInfoBtn.onclick = async () => {
+            const device = deviceList.value;
+            if (!device) {
+                addLog('Please select a device first', 'error');
+                return;
+            }
+            
+            deviceInfoModal.classList.remove('hidden');
+            deviceInfoContent.innerHTML = '<div class="text-center text-slate-500 py-8">Loading device information...</div>';
+            
+            try {
+                const result = await ipcRenderer.invoke('get-device-info', { 
+                    device: device, 
+                    customPath: customScrcpyPath 
+                });
+                
+                if (result.success) {
+                    const info = result.info;
+                    deviceInfoContent.innerHTML = `
+                        <div class="space-y-3">
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Model</div>
+                                <div class="text-white font-bold">${info.model || 'Unknown'}</div>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Manufacturer</div>
+                                <div class="text-white font-bold">${info.manufacturer || 'Unknown'}</div>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Brand</div>
+                                <div class="text-white font-bold">${info.brand || 'Unknown'}</div>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Android Version</div>
+                                <div class="text-white font-bold">${info.androidVersion || 'Unknown'} (SDK ${info.sdk || '?'})</div>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">CPU ABI</div>
+                                <div class="text-white font-bold">${info.abi || 'Unknown'}</div>
+                            </div>
+                            <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Device ID</div>
+                                <div class="text-slate-400 font-mono text-xs">${device}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    deviceInfoContent.innerHTML = `
+                        <div class="text-center text-red-400 py-8">
+                            Failed to retrieve device information:<br>
+                            <span class="text-xs text-slate-500 mt-2">${result.message}</span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                deviceInfoContent.innerHTML = `
+                    <div class="text-center text-red-400 py-8">
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        };
+
+        function closeDeviceInfoModal() {
+            deviceInfoModal.classList.add('hidden');
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.getElementById('tab-usb').classList.toggle('active', tab === 'usb');
+            document.getElementById('tab-wireless').classList.toggle('active', tab === 'wireless');
+            document.getElementById('usb-view').classList.toggle('hidden', tab !== 'usb');
+            document.getElementById('wireless-view').classList.toggle('hidden', tab !== 'wireless');
+        }
+
+        // Wireless History
+        function addToHistory(ip) {
+            let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            if (!history.includes(ip)) {
+                history.unshift(ip);
+                if (history.length > 5) history = history.slice(0, 5);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+                renderHistory();
+            }
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            const container = document.getElementById('recentContainer');
+            const list = document.getElementById('recentList');
+            
+            if (history.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            list.innerHTML = history.map(ip => `
+                <div class="recent-item" onclick="wirelessIp.value='${ip}'; connectWireless.click();">
+                    <span class="text-xs font-mono">${ip}</span>
+                </div>
+            `).join('');
+        }
+
+        // Settings Persistence
+        function saveSettings() {
+            const settings = {
+                resolution: document.getElementById('resolution').value,
+                bitrate: bitrateSlider.value,
+                fps: document.getElementById('fps').value,
+                stayAwake: document.getElementById('stayAwake').checked,
+                turnScreenOff: document.getElementById('turnScreenOff').checked,
+                audioEnabled: document.getElementById('audioEnabled').checked,
+                alwaysOnTop: document.getElementById('alwaysOnTop').checked,
+                rotation: document.getElementById('rotation').value,
+                virtualDisplay: vdCheckbox.checked,
+                vdWidth: document.getElementById('vdWidth').value,
+                vdHeight: document.getElementById('vdHeight').value,
+                vdDpi: document.getElementById('vdDpi').value,
+                autoConnect: document.getElementById('autoConnect').checked,
+                wirelessIp: wirelessIp.value
+            };
+            localStorage.setItem(PERSIST_KEY, JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
+            if (settings.resolution) document.getElementById('resolution').value = settings.resolution;
+            if (settings.bitrate) {
+                bitrateSlider.value = settings.bitrate;
+                bitrateVal.textContent = settings.bitrate + ' Mbps';
+            }
+            if (settings.fps) document.getElementById('fps').value = settings.fps;
+            if (settings.rotation) document.getElementById('rotation').value = settings.rotation;
+            document.getElementById('stayAwake').checked = settings.stayAwake || false;
+            document.getElementById('turnScreenOff').checked = settings.turnScreenOff || false;
+            document.getElementById('audioEnabled').checked = settings.audioEnabled !== false;
+            document.getElementById('alwaysOnTop').checked = settings.alwaysOnTop || false;
+            vdCheckbox.checked = settings.virtualDisplay || false;
+            if (settings.vdWidth) document.getElementById('vdWidth').value = settings.vdWidth;
+            if (settings.vdHeight) document.getElementById('vdHeight').value = settings.vdHeight;
+            if (settings.vdDpi) document.getElementById('vdDpi').value = settings.vdDpi;
+            document.getElementById('autoConnect').checked = settings.autoConnect || false;
+            if (settings.wirelessIp) wirelessIp.value = settings.wirelessIp;
+            
+            updateVdState();
+            renderHistory();
+        }
+
+        // Auto-save on changes
+        ['resolution', 'fps', 'rotation', 'stayAwake', 'turnScreenOff', 'audioEnabled', 'alwaysOnTop', 'autoConnect', 'vdWidth', 'vdHeight', 'vdDpi'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('change', saveSettings);
+        });
+        
+        wirelessIp.addEventListener('blur', saveSettings);
+
+        function updateVdState() {
+            vdSettings.classList.toggle('hidden', !vdCheckbox.checked);
+            saveSettings();
+        }
+        vdCheckbox.addEventListener('change', updateVdState);
+
+        function addLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = {
+                error: 'text-red-400 border-l-2 border-red-500 pl-2 my-1',
+                success: 'text-green-400 border-l-2 border-green-500 pl-2 my-1',
+                info: 'text-slate-300'
+            }[type] || 'text-slate-300';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logEl.appendChild(div);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        async function scanDevices(autoSelectIp = null) {
+            if (!isElectron) return;
+            refreshBtn.disabled = true;
+            refreshIcon.classList.add('animate-spin-custom');
+            
+            const result = await ipcRenderer.invoke('get-devices', customScrcpyPath);
+            
+            refreshBtn.disabled = false;
+            refreshIcon.classList.remove('animate-spin-custom');
+            
+            if (result.error) {
+                statusText.textContent = 'ADB Error';
+                dot.className = "status-dot bg-red-500";
+                return;
+            }
+            
+            deviceList.innerHTML = result.devices.length ? '' : '<option value="">No devices detected</option>';
+            result.devices.forEach(id => {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = id;
+                deviceList.appendChild(opt);
+            });
+            
+            if (result.devices.length) {
+                statusText.textContent = `${result.devices.length} Online`;
+                dot.className = "status-dot bg-green-500";
+                
+                const target = autoSelectIp || wirelessIp.value.trim();
+                const found = Array.from(deviceList.options).find(o => o.value.includes(target) && target !== "");
+                if (found) {
+                    deviceList.value = found.value;
+                } else {
+                    deviceList.selectedIndex = 0;
+                }
+                
+                updateConnectionBadge(deviceList.value);
+            } else {
+                statusText.textContent = 'No Devices';
+                dot.className = "status-dot bg-red-500";
+                updateConnectionBadge(null);
+            }
+        }
+
+        deviceList.addEventListener('change', () => {
+            updateConnectionBadge(deviceList.value);
+        });
+
+        async function validateScrcpy() {
+            if (!isElectron) return;
+            
+            const result = await ipcRenderer.invoke('check-scrcpy', customScrcpyPath);
+            pathDisplay.textContent = result.message;
+            pathDisplay.className = `text-xs font-mono font-bold ${result.found ? 'text-green-400' : 'text-yellow-500'}`;
+            startBtn.disabled = !result.found;
+            
+            if (downloadBinaryBtn) downloadBinaryBtn.classList.toggle('hidden', result.found);
+            
+            const settings = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
+            if (result.found && settings.autoConnect && settings.wirelessIp) {
+                addLog(`Auto-connecting to ${settings.wirelessIp}...`);
+                const connectRes = await ipcRenderer.invoke('adb-connect', { 
+                    ip: settings.wirelessIp, 
+                    customPath: customScrcpyPath 
+                });
+                if (connectRes.success) {
+                    addLog(connectRes.message, 'success');
+                    scanDevices(settings.wirelessIp);
+                } else {
+                    scanDevices();
+                }
+            } else {
+                scanDevices();
+            }
+        }
+
+        killAdbBtn.onclick = async () => {
+            const res = await ipcRenderer.invoke('kill-adb', customScrcpyPath);
+            addLog("ADB stack cleared. Please refresh.", "error");
+            setTimeout(scanDevices, 1000);
+        };
+
+        connectWireless.onclick = async () => {
+            const ip = wirelessIp.value.trim();
+            if (!ip) return addLog('IP Address required', 'error');
+            
+            addLog(`Connecting to ${ip}...`);
+            const res = await ipcRenderer.invoke('adb-connect', { ip, customPath: customScrcpyPath });
+            
+            if (res.success) {
+                addLog(res.message, 'success');
+                addToHistory(ip);
+                saveSettings();
+                setTimeout(() => scanDevices(ip), 1000);
+            } else {
+                addLog(res.message, 'error');
+            }
+        };
+
+        pairBtn.onclick = async () => {
+            const ip = pairIp.value.trim();
+            const code = pairCode.value.trim();
+            
+            if (!ip || !code) return addLog('IP:Port and Code required', 'error');
+            
+            const res = await ipcRenderer.invoke('adb-pair', { ip, code, customPath: customScrcpyPath });
+            
+            if (res.success) {
+                addLog('Pairing Successful! Use Connect via IP now.', 'success');
+            } else {
+                addLog('Pairing Failed: ' + res.message, 'error');
+            }
+        };
+
+        bitrateSlider.oninput = () => {
+            bitrateVal.textContent = bitrateSlider.value + ' Mbps';
+            saveSettings();
+        };
+
+        refreshBtn.onclick = () => scanDevices();
+
+        if (isElectron) {
+            ipcRenderer.on('scrcpy-status', (e, running) => {
+                isMirroring = running;
+                startBtn.textContent = running ? 'STOP MIRRORING' : 'LAUNCH MIRRORING';
+                startBtn.className = running 
+                    ? 'btn-stop w-full py-6 rounded-2xl text-white text-xl font-black transition-all uppercase tracking-wider'
+                    : 'btn-primary w-full py-6 rounded-2xl text-white text-xl font-black transition-all uppercase tracking-wider';
+                
+                if (running) {
+                    startSessionTimer();
+                } else {
+                    stopSessionTimer();
+                }
+            });
+            
+            ipcRenderer.on('scrcpy-log', (e, msg) => addLog(msg));
+        }
+
+        document.getElementById('setPath').onclick = async () => {
+            const path = await ipcRenderer.invoke('select-folder');
+            if (path) {
+                customScrcpyPath = path;
+                localStorage.setItem('scrcpyPath', path);
+                validateScrcpy();
+            }
+        };
+
+        document.getElementById('resetPath').onclick = () => {
+            customScrcpyPath = null;
+            localStorage.removeItem('scrcpyPath');
+            validateScrcpy();
+        };
+
+        startBtn.onclick = () => {
+            if (isMirroring) return ipcRenderer.send('stop-scrcpy');
+            
+            const dev = deviceList.value;
+            if (!dev) return addLog('Select device!', 'error');
+            
+            ipcRenderer.send('run-scrcpy', {
+                device: dev,
+                res: document.getElementById('resolution').value,
+                bitrate: bitrateSlider.value,
+                fps: document.getElementById('fps').value,
+                stayAwake: document.getElementById('stayAwake').checked,
+                turnOff: document.getElementById('turnScreenOff').checked,
+                audioEnabled: document.getElementById('audioEnabled').checked,
+                alwaysOnTop: document.getElementById('alwaysOnTop').checked,
+                virtualDisplay: vdCheckbox.checked,
+                vdWidth: document.getElementById('vdWidth').value,
+                vdHeight: document.getElementById('vdHeight').value,
+                vdDpi: document.getElementById('vdDpi').value,
+                scrcpyPath: customScrcpyPath,
+                rotation: document.getElementById('rotation').value
+            });
+        };
+
+        // Initialize
+        loadTheme();
+        loadSettings();
+        validateScrcpy();
+    </script>
+</body>
+</html>
